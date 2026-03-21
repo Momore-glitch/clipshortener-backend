@@ -6,6 +6,8 @@ const app = express();
 
 app.use(cors());
 
+app.use("/outputs", express.static("outputs"));
+
 // store uploaded files temporarily
 const upload = multer({ dest: "uploads/" });
 
@@ -40,13 +42,16 @@ app.post("/split", upload.single("video"), (req, res) => {
 
     const files = fs.readdirSync(outputDir).filter(f => f.endsWith(".mp4"));
 
-    res.json({
-      message: "Clips created",
-      clips: files
-    });
-  });
-});
 
+    const baseUrl = req.protocol + "://" + req.get("host");
+
+const clipUrls = files.map(f => baseUrl + "/outputs/" + f);
+
+res.json({
+  message: "Clips created",
+  clips: clipUrls
+});
+    
   res.json({
     message: "Upload successful",
     filename: req.file.filename
