@@ -51,12 +51,6 @@ res.json({
   message: "Clips created",
   clips: clipUrls
 });
-    
-  res.json({
-    message: "Upload successful",
-    filename: req.file.filename
-  });
-});
 
 const PORT = process.env.PORT || 3000;
 
