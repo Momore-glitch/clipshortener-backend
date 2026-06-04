@@ -21,6 +21,15 @@ const fs = require("fs");
 const { exec } = require("child_process");
 
 app.post("/split", upload.single("video"), (req, res) => {
+
+const videoUrl = req.body.videoUrl;
+
+if (videoUrl) {
+  return res.json({
+    message: "URL received",
+    url: videoUrl
+  });
+}
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
