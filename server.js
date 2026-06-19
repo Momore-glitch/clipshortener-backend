@@ -20,6 +20,20 @@ app.get("/", (req, res) => {
 const fs = require("fs");
 const { exec } = require("child_process");
 
+const ytDlp = require("yt-dlp-exec");
+const path = require("path");
+
+async function downloadYouTube(url) {
+    const output = path.join("uploads", "youtube_%(id)s.%(ext)s");
+
+    await ytDlp(url, {
+        output,
+        format: "mp4"
+    });
+
+    return output;
+}
+
 app.post("/split", upload.single("video"), (req, res) => {
 
 const videoUrl = req.body.videoUrl;
