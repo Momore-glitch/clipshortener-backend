@@ -44,9 +44,21 @@ if (videoUrl) {
     url: videoUrl
   });
 }
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
-  }
+  const videoUrl = req.body.videoUrl;
+
+if (!req.file && !videoUrl) {
+  return res.status(400).json({
+    error: "No video uploaded or YouTube link provided"
+  });
+}
+
+let inputPath;
+
+if (videoUrl) {
+  inputPath = await downloadYouTube(videoUrl);
+} else {
+  inputPath = req.file.path;
+}
 
   const inputPath = req.file.path;
   const outputDir = "outputs";
