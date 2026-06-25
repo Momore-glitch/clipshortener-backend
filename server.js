@@ -39,6 +39,10 @@ app.post("/split", upload.single("video"), (req, res) => {
 const videoUrl = req.body.videoUrl;
 
 if (videoUrl) {
+    console.log("YouTube URL received:", videoUrl);
+}
+
+if (videoUrl) {
   return res.json({
     message: "URL received",
     url: videoUrl
@@ -55,7 +59,17 @@ if (!req.file && !videoUrl) {
 let inputPath;
 
 if (videoUrl) {
-  inputPath = await downloadYouTube(videoUrl);
+
+    try {
+        inputPath = await downloadYouTube(videoUrl);
+        console.log("Downloaded to:", inputPath);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: "Failed to download YouTube video"
+        });
+    }
+
 } else {
   inputPath = req.file.path;
 }
