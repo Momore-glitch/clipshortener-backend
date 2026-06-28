@@ -93,10 +93,17 @@ if (videoUrl) {
 
   const command = `ffmpeg -i ${inputPath} -c copy -map 0 -f segment -segment_time 30 -reset_timestamps 1 ${outputDir}/clip_%03d.mp4`;
 
-  exec(command, (err) => {
+  exec(command, (err, stdout, stderr) => {
+
     if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Processing failed" });
+        console.error("FFmpeg Error:", err);
+        console.error("STDERR:", stderr);
+        console.error("STDOUT:", stdout);
+
+        return res.status(500).json({
+            error: "Processing failed",
+            details: stderr || err.message
+        });
     }
 
     const files = fs.readdirSync(outputDir).filter(f => f.endsWith(".mp4"));
