@@ -27,11 +27,21 @@ async function downloadYouTube(url) {
     const output = path.join("uploads", "youtube_%(id)s.%(ext)s");
 
     await ytDlp(url, {
-        output,
-        format: "mp4"
-    });
+    output,
+    format: "bv*+ba/b",
+    mergeOutputFormat: "mp4",
+    noWarnings: true,
+    noCheckCertificates: true
+});
 
-    return output;
+    const files = fs.readdirSync("uploads")
+    .filter(f => f.startsWith("youtube_"));
+
+if (files.length === 0) {
+    throw new Error("No downloaded file found.");
+}
+
+return path.join("uploads", files[0]);
 }
 
 app.post("/split", upload.single("video"), (req, res) => {
