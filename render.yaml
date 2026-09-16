@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: clipshortener-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: frankfurt
+    healthCheckPath: /health
+    envVars:
+      - key: CLIPSHORTENER_MAX_VIDEO_GB
+        value: "10"
+      - key: CLIPSHORTENER_UPLOAD_CHUNK_MB
+        value: "64"
